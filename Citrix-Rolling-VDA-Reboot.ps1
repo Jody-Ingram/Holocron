@@ -54,7 +54,7 @@ foreach ($group in Get-DDCServerDesktopGroup -AdminAddress $DDCServer -Tag AutoR
 		foreach ($vm in Get-DDCServerMachine -DesktopGroupName $group.Name -RegistrationState Registered -InMaintenanceMode $false)
 	    {
             try { 
-                $wmi=Get-WmiObject -class Win32_OperatingSystem -computer $vm.IPAddress #use IP in case name resolution fails
+                $wmi=Get-WmiObject -class Win32_OperatingSystem -computer $vm.IPAddress
                 $LBTime=$wmi.ConvertToDateTime($wmi.Lastbootuptime)
                 [TimeSpan]$uptime=New-TimeSpan $LBTime $(get-date)
                 $vmsWithUptime.Add($vm.MachineName,$uptime)
