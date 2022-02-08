@@ -10,8 +10,9 @@ asnp Citrix*
 # Server uptime in hours. Adjust as needed. To be called later for exclusions purposes. 
 $ServerUptime = 72
 
-# Define the threshold for how many VDAs can be down at once. Adjust as needed. Number is a percent. 
-$MaxServersDown = 30
+# Define the threshold for how many VDAs can be up and down at once. Adjust as needed. Number is a percent. 30% is for weekend load.
+$MaxServersUp = 30
+$MaxServersDown = 70
 
 # Citrix Delivery Controllers. ADJUST PER CITRIX FARM!
 # Note: I will eventually add all delivery controllers here as seperate variables as I adjust this script.
