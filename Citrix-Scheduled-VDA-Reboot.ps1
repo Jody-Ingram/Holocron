@@ -1,10 +1,13 @@
 <#
 Script  :  Citrix-Scheduled-VDA-Reboot.ps1
-Version :  1.0
+Version :  2.0 (IN DEVELOPMENT)
 Date    :  3/23/2022
 Author: Jody Ingram
 Notes: This script is used to reboot Citrix PVS VDA servers. It will put them into Maintenance Mode, notify the end users, reboot and take them out of Maintenance Mode. 
 Launcher Code: -ExecutionPolicy bypass -File C:\Scripting\Citrix-Scheduled-VDA-Reboot.ps1 -AdGroup AD-REBOOT-GROUP
+
+Updates: Reconfiguring for Azure Automation Account and to be used in new Rolling Reboot System.
+
 #>
 
 Param(
@@ -14,6 +17,10 @@ Param(
 # Imports Citrix and AD Snap-In Modules for PowerShell.
 Add-PSSnapin Citrix*
 Import-Module active*
+
+# Azure Automation Account. Note: This is temporarily disabled. 
+# az login
+
 
 # Pulls computer objects from AD group and drops them into a server list that the script reads.
 
