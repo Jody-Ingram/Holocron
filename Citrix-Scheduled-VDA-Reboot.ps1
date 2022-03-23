@@ -1,5 +1,5 @@
 <#
-Script  :  Citrix-VDA-Reboot.ps1
+Script  :  Citrix-Scheduled-VDA-Reboot.ps1
 Version :  CURRENTLY IN DEVELOPMENT
 Date    :  3/23/2022
 Author: Jody Ingram
