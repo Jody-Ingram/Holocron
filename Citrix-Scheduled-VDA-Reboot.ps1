@@ -1,10 +1,10 @@
 <#
 Script  :  Citrix-Scheduled-VDA-Reboot.ps1
-Version :  CURRENTLY IN DEVELOPMENT
+Version :  1.0
 Date    :  3/23/2022
 Author: Jody Ingram
 Notes: This script is used to reboot Citrix PVS VDA servers. It will put them into Maintenance Mode, notify the end users, reboot and take them out of Maintenance Mode. 
-Launcher Code: -ExecutionPolicy bypass -File c:\tools\reboot.ps1 -AdGroup AD-REBOOT-GROUP
+Launcher Code: -ExecutionPolicy bypass -File C:\Scripting\Citrix-Scheduled-VDA-Reboot.ps1 -AdGroup AD-REBOOT-GROUP
 #>
 
 Param(
