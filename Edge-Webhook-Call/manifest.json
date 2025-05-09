@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Send to ServiceNow",
+  "version": "1.0",
+  "permissions": ["contextMenus", "notifications"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "48": "icon48.png"
+  }
+}
