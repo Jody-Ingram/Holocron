@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .header p {
+        opacity: 0.9;
+        font-size: 14px;
+    }
+
+    .content {
+        padding: 30px 20px;
+    }
+
+    .button {
+        width: 100%;
+        padding: 18px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .button-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .button-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    }
+
+    .button-secondary {
+        background: linear-gradient(135deg, #48CAE4, #0077B6);
+        color: white;
+        box-shadow: 0 4px 15px rgba(72, 202, 228, 0.3);
+    }
+
+    .button-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(72, 202, 228, 0.4);
+    }
+
+    .button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .status {
+        text-align: center;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .status-success {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        color: #2d3748;
+    }
+
+    .status-info {
+        background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+        color: #2d3748;
+    }
+
+    .map-container {
+        height: 300px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    #map {
+        height: 100%;
+        width: 100%;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .parking-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #495057;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Parking Tracker</h1>
+            <p>Never forget where you parked again</p>
+        </div>
+
+```
+    <div class="content">
+        <button id="parkBtn" class="button button-primary">
+            <span class="icon">📍</span>
+            Park Here
+        </button>
+        
+        <button id="findBtn" class="button button-secondary" disabled>
+            <span class="icon">🔍</span>
+            Find My Car
+        </button>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div id="mapContainer" class="map-container" style="display: none;">
+            <div id="map"></div>
+        </div>
+        
+        <div id="parkingInfo" class="parking-info" style="display: none;">
+            <strong>Parking Details:</strong><br>
+            <span id="parkingTime"></span><br>
+            <span id="parkingCoords"></span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+    let parkedLocation = null;
+    let map = null;
+    let parkedMarker = null;
+    let currentMarker = null;
+
+    const parkBtn = document.getElementById('parkBtn');
+    const findBtn = document.getElementById('findBtn');
+    const status = document.getElementById('status');
+    const mapContainer = document.getElementById('mapContainer');
+    const parkingInfo = document.getElementById('parkingInfo');
+    const parkingTime = document.getElementById('parkingTime');
+    const parkingCoords = document.getElementById('parkingCoords');
+
+    function showStatus(message, type = 'info') {
+        status.textContent = message;
+        status.className = `status status-${type}`;
+        status.style.display = 'block';
+    }
+
+    function hideStatus() {
+        status.style.display = 'none';
+    }
+
+    function initMap(lat, lng) {
+        if (map) {
+            map.remove();
+        }
+        
+        map = L.map('map').setView([lat, lng], 16);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        mapContainer.style.display = 'block';
+    }
+
+    function addParkedMarker(lat, lng) {
+        if (parkedMarker) {
+            map.removeLayer(parkedMarker);
+        }
+        
+        parkedMarker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup('🚗 Your car is parked here!')
+            .openPopup();
+    }
+
+    function addCurrentLocationMarker(lat, lng) {
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+        }
+        
+        const currentIcon = L.divIcon({
+            className: 'current-location-marker',
+            html: '📍',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+        
+        currentMarker = L.marker([lat, lng], { icon: currentIcon })
+            .addTo(map)
+            .bindPopup('📍 You are here');
+    }
+
+    function updateParkingInfo(lat, lng, timestamp) {
+        const date = new Date(timestamp);
+        parkingTime.textContent = `Parked: ${date.toLocaleString()}`;
+        parkingCoords.textContent = `Location: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        parkingInfo.style.display = 'block';
+    }
+
+    parkBtn.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+            showStatus('Geolocation is not supported by this browser', 'info');
+            return;
+        }
+
+        parkBtn.innerHTML = '<span class="loading"></span> Getting location...';
+        parkBtn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const timestamp = Date.now();
+                
+                parkedLocation = { lat, lng, timestamp };
+                
+                initMap(lat, lng);
+                addParkedMarker(lat, lng);
+                updateParkingInfo(lat, lng, timestamp);
+                
+                showStatus('📍 Parking location saved!', 'success');
+                findBtn.disabled = false;
+                
+                parkBtn.innerHTML = '<span class="icon">📍</span> Park Here';
+                parkBtn.disabled = false;
+            },
+            (error) => {
+                let message = 'Unable to get your location. ';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message += 'Please allow location access.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message += 'Location information unavailable.';
+                        break;
+                    case error.TIMEOUT:
+                        message += 'Location request timed out.';
+                        break;
+                    default:
+                        message += 'Unknown error occurred.';
+                        break;
+                }
+                showStatus(message, 'info');
+                
+                parkBtn.innerHTML = '<span class="icon">📍</span> Park Here';
+                parkBtn.disabled = false;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+
+    findBtn.addEventListener('click', () => {
+        if (!parkedLocation) {
+            showStatus('No parking location saved', 'info');
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            showStatus('Geolocation is not supported by this browser', 'info');
+            return;
+        }
+
+        findBtn.innerHTML = '<span class="loading"></span> Finding you...';
+        findBtn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const currentLat = position.coords.latitude;
+                const currentLng = position.coords.longitude;
+                
+                if (!map) {
+                    initMap(parkedLocation.lat, parkedLocation.lng);
+                    addParkedMarker(parkedLocation.lat, parkedLocation.lng);
+                }
+                
+                addCurrentLocationMarker(currentLat, currentLng);
+                
+                // Fit map to show both markers
+                const group = new L.featureGroup([parkedMarker, currentMarker]);
+                map.fitBounds(group.getBounds().pad(0.1));
+                
+                // Calculate distance
+                const distance = map.distance([currentLat, currentLng], [parkedLocation.lat, parkedLocation.lng]);
+                const distanceText = distance < 1000 ? 
+                    `${Math.round(distance)}m` : 
+                    `${(distance/1000).toFixed(1)}km`;
+                
+                showStatus(`🚗 Your car is ${distanceText} away`, 'success');
+                
+                findBtn.innerHTML = '<span class="icon">🔍</span> Find My Car';
+                findBtn.disabled = false;
+            },
+            (error) => {
+                showStatus('Unable to get current location', 'info');
+                findBtn.innerHTML = '<span class="icon">🔍</span> Find My Car';
+                findBtn.disabled = false;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+</script>
+```
+
+</body>
+</html>
