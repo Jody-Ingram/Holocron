@@ -1,0 +1,44 @@
+%% Project Intake Request Flowchart
+%% By Jody Ingram
+%% Use on Mermaid.Live
+
+graph TD
+    %% Shape styles
+    classDef startend fill:#7E57C2,stroke:#BDBDBD,color:#FFFFFF;
+    classDef process  fill:#03A9F4,stroke:#BDBDBD,color:#FFFFFF;
+    classDef decision fill:#FFB300,stroke:#BDBDBD,color:#FFFFFF;
+
+    %% Phase 1: Request & ARC Approval
+    subgraph "Phase 1: Request & ARC"
+        A("Start: Project Request Submitted") --> B("ARC Reviews Request");
+        B --> C{"ARC Approved?"};
+    end
+
+    %% Phase 2: Intake Process
+    subgraph "Phase 2: Intake"
+        C --<span style='color:#00FF00;font-weight:bold;font-size:36px'>Yes</span> --> G("Architect Creates TBD");
+        G --> D("Requestor Validates TBD");
+        D --> E("Architect Sends Final TBD & Billing to Nell");
+        E --> F("Nell Schedules Intake Meeting");
+        F --> C2{"Intake Approved?"};
+    end
+
+    %% Phase 3: Build & Delivery
+    subgraph "Phase 3: Build & Delivery"
+        C2 --<span style='color:#00FF00;font-weight:bold;font-size:36px'>Yes</span> --> H("Nell requests/delivers PRJTask to build team");
+        H --> I("Engineers Build Project Resources");
+        I --> J("Engineers notify Nell that project is built");
+        J --> K("Nell notifies customer that project resources are ready");
+        K --> L("End: Project Complete");
+    end
+
+    %% Rejection Paths
+    subgraph "Rejection Path"
+        C --<span style='color:#880808;font-weight:bold;font-size:36px'>No</span> --> Z("END: Project Rejected by ARC");
+        C2 --<span style='color:#880808;font-weight:bold;font-size:36px'>No</span> --> Z2("END: Project Rejected by Intake");
+    end
+
+    %% Apply styles
+    class A,L,M,Z,Z2 startend;
+    class B,D,E,F,G,H,I,J,K process;
+    class C,C2 decision;
