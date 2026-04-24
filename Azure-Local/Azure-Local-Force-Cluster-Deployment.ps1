@@ -8,7 +8,7 @@ Purpose :  Deploys Azure Local Cluster using ARM template, with retry logic for 
 
 # Set parameters as needed
 param(
-    [string]$SubscriptionNameOrId = "WS_ITEC_EA",
+    [string]$SubscriptionNameOrId = "SUBSCRIPTION_NAME",
 
     [string]$Location = "eastus",
 
