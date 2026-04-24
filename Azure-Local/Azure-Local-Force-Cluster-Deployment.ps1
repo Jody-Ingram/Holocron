@@ -112,7 +112,7 @@ function Wait-AzureLocalDeployment {
 
         Write-Log ("ProvisioningState = {0}" -f $dep.ProvisioningState)
 
-        # Only return when ARM says the deployment is done. ##### PLEASE REVIEW COMMENT #####
+        # Only return when ARM says the deployment is complete.
         switch ($dep.ProvisioningState) {
             "Succeeded" { return $dep }
             "Failed"    { return $dep }
