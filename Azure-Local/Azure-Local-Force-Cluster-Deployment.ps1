@@ -3,7 +3,7 @@ Script  :  Azure-Local-Force-Cluster-Deployment.ps1
 Version :  1.0
 Date    :  4/24/2026
 Author  :  Jody Ingram
-Purpose :  Deploys Azure Local Cluster using ARM template, with retry logic for common timeout/cancel failure patterns.
+Purpose :  Deploys Azure Local Cluster using ARM template, with custom retry logic for common timeout/cancel failure patterns.
 #>
 
 # Set parameters as needed
