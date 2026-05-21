@@ -1,8 +1,8 @@
 # Patch Analysis Reporter - Auto Deploy Package
 
-This package is preconfigured with your Copilot Agent URL:
+This package is preconfigured with a Copilot Agent URL. Please change this to reflect your Copilot Agent URL.
 
-https://m365.cloud.microsoft/chat/?titleId=T_223cf89f-228b-0d3b-e8a5-d6023b91ece0&source=embedded-builder
+https://m365.cloud.microsoft/chat/add-your-url-here
 
 ## Recommended quick deployment
 
