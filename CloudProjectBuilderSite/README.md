@@ -1,9 +1,6 @@
 # Cloud Project Build Planner
 
-An editable Azure project intake and engineering handoff site derived from:
-
-- `Azure Build Template_v3.0.xlsm`
-- `Azure Naming Standards (2).xlsx`
+An editable Azure project intake and engineering handoff site derived from standardized Microsoft documentation around naming and best practices. 
 
 ## Included
 
@@ -16,7 +13,7 @@ An editable Azure project intake and engineering handoff site derived from:
 - Editable project JSON import/export
 - No-code resource template editor and template JSON import/export
 
-## Run locally
+## Instructions to Run Locally
 
 ```bash
 npm install
