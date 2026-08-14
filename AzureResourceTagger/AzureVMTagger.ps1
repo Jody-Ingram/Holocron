@@ -17,15 +17,15 @@ $LogFolder = 'C:\Tools\Azure_Resource_Tagger\Logs'
 $RequiredColumns = @('NAME', 'SUBSCRIPTION', 'RESOURCE GROUP')
 
 $StandardTags = @(
-    [pscustomobject]@{ Name = 'Application';       Example = 'Metric Insights' }
-    [pscustomobject]@{ Name = 'Application Group'; Example = 'Enterprise Data Management' }
+    [pscustomobject]@{ Name = 'Application';       Example = 'APPLICATION NAME' }
+    [pscustomobject]@{ Name = 'Application Group'; Example = 'APP SUPPORT GROUP' }
     [pscustomobject]@{ Name = 'Application Tier';  Example = 'Tier 4' }
     [pscustomobject]@{ Name = 'Business Unit';     Example = 'IT' }
-    [pscustomobject]@{ Name = 'Contact Group';     Example = 'az-alerts-omnichannel' }
+    [pscustomobject]@{ Name = 'Contact Group';     Example = 'az-alerts-appSupport' }
     [pscustomobject]@{ Name = 'Environment';       Example = 'Dev' }
     [pscustomobject]@{ Name = 'LOA Level';         Example = 'LOA4' }
     [pscustomobject]@{ Name = 'Owner';             Example = 'user@domain.org' }
-    [pscustomobject]@{ Name = 'Patch Week';        Example = 'Ansible-Managed' }
+    [pscustomobject]@{ Name = 'Patch Week';        Example = 'Patch Week 1' }
     [pscustomobject]@{ Name = 'Role';              Example = 'Virtual Machine' }
 )
 
